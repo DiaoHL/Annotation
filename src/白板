@@ -1,0 +1,65 @@
+a、反射注解类
+java.lang.reflect.AnnotatedElement:
+1.<T extends Annotation> T getAnnotation(Class<T> annotationType):
+得到指定类型的注解引用。没有返回null。
+
+2.Annotation[] getAnnotations()：得到所有的注解，包含从父类继承下来的。
+
+3.Annotation[] getDeclaredAnnotations()：得到自己身上的注解。
+
+4.boolean isAnnotationPresent(Class<? extends Annotation> annotationType)：判断指定的注解有没有。
+
+5.Class、Method、Field、Constructor等实现了AnnotatedElement接口.
+如果：Class.isAnnotationPresent(T.class):判断类上面有没有自定义的注解；
+Method.isAnnotationPresent(T.class):判断方法上面有没有自定义的注解。
+
+1. @Documented – 表示使用该注解的元素应被javadoc或类似工具文档化，
+它应用于类型声明，类型声明的注解会影响客户端对注解元素的使用。
+如果一个类型声明添加了Documented注解，那么它的注解会成为被注解元素的公共API的一部分。
+
+2. @Target – 表示支持注解的程序元素的种类，一些可能的值有TYPE, METHOD, CONSTRUCTOR, FIELD等等。
+如果Target元注解不存在，那么该注解就可以使用在任何程序元素之上。
+
+3. @Inherited – 表示一个注解类型会被自动继承，如果用户在类声明的时候查询注解类型，
+同时类声明中也没有这个类型的注解，那么注解类型会自动查询该类的父类，这个过程将会不停地重复，
+直到该类型的注解被找到为止，或是到达类结构的顶层（Object）。
+
+4. @Retention – 表示注解类型保留时间的长短，它接收RetentionPolicy参数，
+可能的值有SOURCE, CLASS, 以及RUNTIME。
+
+@Target({ElementType.METHOD,ElementType.TYPE})
+// 表示Target该注解可以用于什么地方.可能的ElemenType参数:
+// CONSTRUCTOR：构造器的声明
+// LOCAL_VARIABLE：局部变量声明
+// METHOD：方法声明
+// PACKAGE：包声明 PARAMETER：参数声明
+// TYPE：类、接口（包括注解类型）或enum声明
+
+@Retention(RetentionPolicy.RUNTIME) // 也被称为元注解
+// Retention 表示需要在什么级别保存该注解信息.可选的RetentionPolicy参数包括:
+// SOURCE：注解将被编译器丢弃
+// CLASS：注解在class文件中可用，但会被VM丢弃
+// RUNTIME：VM将在运行期间保留注解，因此可以通过反射机制读取注解的信息。(常用)
+
+@Inherited
+// 允许子类继承父类中的注解
+
+@Documented
+//@Document：将注解包含在Javadoc中
+
+// 如果在没有默认值的情况下，使用自定义注解我们需要设置注解中属性的值。
+
+/**
+ * 注解的属性类型：
+ * 1.基本类型
+ * 2.String
+ * 3.枚举类型
+ * 4.注解类型
+ * 5.Class类型
+ * 6.以上类型的一维数组类型
+ *
+ * 注解的方法不能有参数
+ * 注解可以设定初始值，使用default就可以实现。
+ * 注解只有一个元素的时候，该元素名称必须是value，并且在使用该注解的时候可以省略”alue=”。
+ * 注解的值必须是确定的，且不能使用null作为值。
+ */
